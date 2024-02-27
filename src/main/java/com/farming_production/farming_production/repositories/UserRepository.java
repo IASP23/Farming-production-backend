@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.farming_production.farming_production.models.User;
 
 @Repository
-public interface UserRepository extends JpaRepository<User,Long>{
+public interface UserRepository extends JpaRepository<User, Long> {
     public User findByName(String name);
 }

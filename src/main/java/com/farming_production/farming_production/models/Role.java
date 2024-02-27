@@ -6,13 +6,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name="TBL_ROLES", uniqueConstraints= {@UniqueConstraint(columnNames= {"USER_ID", "ROLES"})})
+@Table(name = "TBL_ROLES")
 @Getter
 @Setter
 public class Role {
@@ -22,5 +21,4 @@ public class Role {
 
     @Column(name = "ROLES")
     private String role;
-    
 }

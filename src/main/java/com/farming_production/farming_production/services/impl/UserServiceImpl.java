@@ -18,62 +18,59 @@ import com.farming_production.farming_production.models.User;
 import com.farming_production.farming_production.repositories.UserRepository;
 import com.farming_production.farming_production.services.UserService;
 
-
 @Service
-public class UserServiceImpl implements UserService  , UserDetailsService{
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     final UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository repository){
-        this.userRepository = repository;        
+    public UserServiceImpl(UserRepository repository) {
+        this.userRepository = repository;
     }
 
     @Override
     public void create(User newUser) {
+        User existingUser = userRepository.findByName(newUser.getName());
+        if (existingUser != null) {
+            throw new IllegalStateException("User with name " + newUser.getName() + " already exists");
+        }
+
         Role role = new Role();
         role.setRole("ROLE_WORKER");
         newUser.getRoles().add(role);
-        userRepository.save(newUser);                
+        userRepository.save(newUser);
     }
 
     private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    
     @Override
-	@Transactional(readOnly=true)
-	public UserDetails loadUserByUsername(String name ) throws UsernameNotFoundException {
+    @Transactional(readOnly = true)
+    public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
 
         User user = userRepository.findByName(name);
-        
-        if(user == null) {
-        	logger.error("User "+ name + " not found");
-        	throw new UsernameNotFoundException("Error: User" + name + " not found");
-        }
 
-        if (user.getPassword().equals("jgvajvajv")){
-            logger.error("User "+ name + " not found");
-        	throw new UsernameNotFoundException("Error: Wrong Password");
+        if (user == null) {
+            logger.error("User " + name + " not found");
+            throw new UsernameNotFoundException("Error: User" + name + " not found");
         }
 
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        
-        for(Role role: user.getRoles()) {
-        	logger.info("Role: ".concat(role.getRole()));
-        	authorities.add(new SimpleGrantedAuthority(role.getRole()));
-        }
-        
-        if(authorities.isEmpty()) {
-        	logger.error("User " + user.getName() + " has no roles");
-        	throw new UsernameNotFoundException("Error: User " + user.getName() +" has no roles");
-        }
-        
-		return new org.springframework.security.core.userdetails.User(user.getName(), 
-            user.getPassword(), 
-            user.getEnabled(), 
-            true, 
-            true, 
-            true, authorities);
-	}
 
-    
+        for (Role role : user.getRoles()) {
+            logger.info("Role: ".concat(role.getRole()));
+            authorities.add(new SimpleGrantedAuthority(role.getRole()));
+        }
+
+        if (authorities.isEmpty()) {
+            logger.error("User " + user.getName() + " has no roles");
+            throw new UsernameNotFoundException("Error: User " + user.getName() + " has no roles");
+        }
+
+        return new org.springframework.security.core.userdetails.User(user.getName(),
+                user.getPassword(),
+                user.getEnabled(),
+                true,
+                true,
+                true, authorities);
+    }
+
 }

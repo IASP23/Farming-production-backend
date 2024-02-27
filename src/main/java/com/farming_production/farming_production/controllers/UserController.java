@@ -15,8 +15,8 @@ import com.farming_production.farming_production.models.User;
 import com.farming_production.farming_production.services.UserService;
 
 @CrossOrigin(origins = "http://localhost:5173")
-@RestController
 @RequestMapping("/users")
+@RestController
 public class UserController {
 
     private final UserService service;
@@ -33,7 +33,6 @@ public class UserController {
 
         String passwordEncode = passwordEncoder.encode(newUser.getPassword());
         newUser.setPassword(passwordEncode);
-
         service.create(newUser);
         return ResponseEntity.status(HttpStatus.CREATED).body("User created");
     }
