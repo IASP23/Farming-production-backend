@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.datasource.UserCredentialsDataSourceAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,11 +30,11 @@ public class UserController {
     }
 
     @PostMapping()
-    public ResponseEntity<String> create(@Valid @RequestBody User newUser) {
+    public ResponseEntity<User> create(@Valid @RequestBody User newUser) {
 
         String passwordEncode = passwordEncoder.encode(newUser.getPassword());
         newUser.setPassword(passwordEncode);
-        service.create(newUser);
-        return ResponseEntity.status(HttpStatus.CREATED).body("User created");
+        User userCreate = service.create(newUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userCreate);
     }
 }

@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void create(User newUser) {
+    public User create(User newUser) {
         User existingUser = userRepository.findByName(newUser.getName());
         if (existingUser != null) {
             throw new IllegalStateException("User with name " + newUser.getName() + " already exists");
@@ -37,7 +37,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         Role role = new Role();
         role.setRole("ROLE_WORKER");
         newUser.getRoles().add(role);
-        userRepository.save(newUser);
+        User userRep = userRepository.save(newUser);
+        return userRep;
     }
 
     private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
