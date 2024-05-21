@@ -19,7 +19,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name="TBL_PRODUCTS")
+@Table(name = "TBL_PRODUCTS")
 @Getter
 @Setter
 public class Product {
@@ -27,48 +27,47 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="NAMES",nullable = false)
+    @Column(name = "NAMES", nullable = false)
     private String name;
 
-    @Column(name="DESCRIPTIONS")
+    @Column(name = "DESCRIPTIONS")
     private String description;
 
-    @Column(name="CATEGORY")
+    @Column(name = "CATEGORY")
     private String category;
 
-    @Column(name="AMOUNT")
+    @Column(name = "AMOUNT")
     private String amount;
 
-    @Column(name="DATES")
+    @Column(name = "DATES")
     private String date;
 
-    @Column(name = "CREATED_DATE")    
+    @Column(name = "CREATED_DATE")
     private Calendar createdDate;
-    @Column(name = "CREATED_BY")    
-    private String createdBy;  
-    
-    @Column(name = "UPDATED_DATE")    
+    @Column(name = "CREATED_BY")
+    private String createdBy;
+
+    @Column(name = "UPDATED_DATE")
     private Calendar updatedDate;
-    @Column(name = "UPDATED_BY")    
-    private String updatedBy;  
+    @Column(name = "UPDATED_BY")
+    private String updatedBy;
 
     @PrePersist
-    public void prePersist(){
+    public void prePersist() {
         createdDate = Calendar.getInstance();
         createdBy = "user1";
     }
 
     @PreUpdate
-    public void preUpdate(){
+    public void preUpdate() {
         updatedDate = Calendar.getInstance();
         updatedBy = "user2";
     }
 
-    
-    @OneToMany(mappedBy="product" , cascade = CascadeType.REMOVE) //nombre del atributo en la clase B       
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE) // nombre del atributo en la clase B
     private List<Maintenance> maintenances;
 
-    @OneToMany(mappedBy="product" , cascade = CascadeType.REMOVE) //nombre del atributo en la clase B       
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE) // nombre del atributo en la clase B
     private List<Supply> supply;
 
 }
